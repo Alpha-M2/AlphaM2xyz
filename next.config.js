@@ -2,7 +2,12 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-        domains: ['dune.com'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'dune.com',
+            },
+        ],
         formats: ['image/avif', 'image/webp'],
     },
     experimental: {

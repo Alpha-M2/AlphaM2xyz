@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Github, Twitter, Mail, ExternalLink, ChevronRight, Terminal, TrendingUp, Shield, Zap, Send, Linkedin } from 'lucide-react';
 
 export default function Portfolio() {
@@ -18,7 +19,7 @@ export default function Portfolio() {
         {
             title: "Portfolio Tracker Pro",
             description: "Real-time multi-chain portfolio tracking with PnL analytics, gas optimization alerts, and whale wallet monitoring.",
-            impact: "Tracking $2M+ in assets across 150+ wallets",
+            impact: "Tracking $2M+ in assets",
             tech: ["Python", "Web3.py", "FastAPI", "PostgreSQL"],
             link: "#",
             github: "#"
@@ -26,41 +27,48 @@ export default function Portfolio() {
         {
             title: "Token Launch Detector",
             description: "Mempool scanner detecting new token launches on DEXs with instant rug pull risk scoring.",
-            impact: "Spotted 50+ rug pulls early • Saved users $100K+",
+            impact: "Saved users $100K+",
             tech: ["Python", "Ethers.js", "Telegram Bot API"],
             link: "#",
             github: "#"
         },
         {
             title: "Crypto News Aggregator Bot",
-            description: "AI-powered Telegram bot aggregating breaking DeFi news, governance proposals, and protocol updates.",
-            impact: "1,200+ subscribers • 50+ alerts daily",
-            tech: ["Python", "OpenAI API", "Telegram", "Redis"],
+            description: "A crypto news aggregation pipeline that collects, normalizes, deduplicates, summarizes, and delivers real-time crypto news directly to Telegram subscribers.",
+            impact: "Live Bot: @BlockoraBot",
+            tech: ["Python", "MongoDB", "RSS", "Web Scraping", "AsyncIO", "Telegram Bot API"],
             link: "#",
             github: "#"
         },
         {
             title: "MEV Sandwich Attack Monitor",
             description: "Real-time detection and analysis of MEV sandwich attacks with victim wallet notifications.",
-            impact: "Analyzed 10K+ transactions • Protected 200+ traders",
+            impact: "Protected 200+ traders",
             tech: ["Python", "DuneSQL", "Flashbots API"],
             link: "#",
             github: "#"
-        }
-    ];
-
-    const duneBoards = [
+        },
         {
             title: "DeFi Protocol Health Dashboard",
             description: "TVL trends, user growth, revenue metrics across top 20 protocols. Real-time risk indicators.",
-            embedUrl: "https://dune.com/embeds/3234567/5432109",
-            views: "12K+"
+            impact: "12K+ views",
+            tech: ["DuneSQL", "Data Viz", "On-Chain"],
+            link: "https://dune.com/embeds/3234567/5432109"
         },
         {
             title: "Whale Wallet Activity Tracker",
             description: "Top 100 whale movements, accumulation patterns, and market impact analysis.",
-            embedUrl: "https://dune.com/embeds/3234568/5432110",
-            views: "8K+"
+            impact: "8K+ views",
+            tech: ["DuneSQL", "Whale Watch"],
+            link: "https://dune.com/embeds/3234568/5432110"
+        },
+        {
+            title: "AlphaM2 Portfolio",
+            description: "Modern personal portfolio website with task-based agentic development workflow.",
+            impact: "High Performance",
+            tech: ["Next.js 16", "React 19", "Tailwind CSS"],
+            link: "#",
+            github: "#"
         }
     ];
 
@@ -69,6 +77,7 @@ export default function Portfolio() {
         { name: "DuneSQL", level: 90 },
         { name: "Web3.py / Ethers.js", level: 88 },
         { name: "DeFi Protocols", level: 92 },
+        { name: "Community Management", level: 85 },
         { name: "Bot Development", level: 90 },
         { name: "On-Chain Analysis", level: 93 }
     ];
@@ -97,10 +106,13 @@ export default function Portfolio() {
                                     AM2
                                 </div>
                                 {
-                                    <img
+                                    <Image
                                         src="/cMqMsAqw_400x400.jpg"
                                         alt="Alpha_M2"
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 128px, 160px"
+                                        priority
                                     />
                                 }
                             </div>
@@ -158,12 +170,12 @@ export default function Portfolio() {
                 </div>
             </section>
 
-            {/* Projects Section */}
+            {/* Experiences Section */}
             <section id="projects" className="relative py-32 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-16">
                         <h2 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
-                            Projects That Print
+                            Experiences
                         </h2>
                         <p className="text-xl text-gray-400">Tools that move markets, protect capital, and spot alpha.</p>
                     </div>
@@ -172,7 +184,7 @@ export default function Portfolio() {
                         {projects.map((project, idx) => (
                             <div
                                 key={idx}
-                                className="group bg-gradient-to-br from-violet-950/20 to-indigo-950/20 border border-violet-900/30 rounded-2xl p-8 hover:border-violet-600/50 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-900/20"
+                                className="group bg-gradient-to-br from-violet-950/20 to-indigo-950/20 border border-violet-900/30 rounded-2xl p-8 hover:border-violet-600/50 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-900/20 flex flex-col"
                             >
                                 <div className="flex items-start justify-between mb-4">
                                     <h3 className="text-2xl font-bold text-white group-hover:text-violet-400 transition-colors">
@@ -192,7 +204,7 @@ export default function Portfolio() {
                                     </div>
                                 </div>
 
-                                <p className="text-gray-300 mb-4 leading-relaxed">
+                                <p className="text-gray-300 mb-4 leading-relaxed flex-grow">
                                     {project.description}
                                 </p>
 
@@ -219,42 +231,6 @@ export default function Portfolio() {
                 </div>
             </section>
 
-            {/* Dune Dashboards Section */}
-            <section id="dune" className="relative py-32 px-6 bg-gradient-to-b from-black via-violet-950/10 to-black">
-                <div className="max-w-7xl mx-auto">
-                    <div className="mb-16">
-                        <h2 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
-                            Dune Dashboards
-                        </h2>
-                        <p className="text-xl text-gray-400">On-chain insights that institutions pay for. I give away for free.</p>
-                    </div>
-
-                    <div className="space-y-16">
-                        {duneBoards.map((board, idx) => (
-                            <div key={idx} className="bg-gradient-to-br from-violet-950/20 to-indigo-950/20 border border-violet-900/30 rounded-2xl p-8">
-                                <div className="flex flex-col md:flex-row justify-between items-start mb-6">
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-white mb-2">{board.title}</h3>
-                                        <p className="text-gray-400">{board.description}</p>
-                                    </div>
-                                    <div className="mt-4 md:mt-0 px-4 py-2 bg-violet-900/30 rounded-lg">
-                                        <span className="text-violet-400 font-semibold">{board.views} views</span>
-                                    </div>
-                                </div>
-
-                                <div className="aspect-video bg-black/50 rounded-xl border border-violet-800/30 overflow-hidden">
-                                    <iframe
-                                        src={board.embedUrl}
-                                        className="w-full h-full"
-                                        title={board.title}
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             {/* About Section */}
             <section id="about" className="relative py-32 px-6">
                 <div className="max-w-5xl mx-auto">
@@ -267,18 +243,31 @@ export default function Portfolio() {
                     <div className="grid md:grid-cols-2 gap-16">
                         <div>
                             <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                                Started in traditional finance, pivoted to crypto in 2020. Spent 10,000+ hours
-                                analyzing on-chain data, building bots, and reverse-engineering DeFi protocols.
+                                Started in traditional finance, pivoted to crypto in 2021. Worked as a Community Manager/Moderator
+                                for several projects till 2023.
+                            </p>
+                            <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+                                Worked as a Social Media Manager for few popular Projects and Influencers till early 2025.
+                            </p>
+                            <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+                                Now, spending 10,000+ hours analyzing on-chain data, building bots, and reverse-engineering DeFi protocols.
                             </p>
                             <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                                 Philosophy: <span className="text-violet-400 font-semibold">1% better everyday</span>.
                                 Every line of code, every dashboard, every insight compounds. Like chess —
                                 positioning matters more than immediate wins.
                             </p>
-                            <p className="text-lg text-gray-300 leading-relaxed">
-                                Available for: Custom dashboards, MEV tools, portfolio trackers,
-                                risk management systems, and anything that requires deep on-chain expertise.
-                            </p>
+                            <div className="text-lg text-gray-300 leading-relaxed">
+                                <p className="mb-2 font-semibold text-white">Available for:</p>
+                                <ul className="list-disc list-inside space-y-1 text-gray-400">
+                                    <li>Custom bots & Telegram/Discord tools</li>
+                                    <li>Dune dashboards & on-chain analytics</li>
+                                    <li>MEV bots & opportunities detection</li>
+                                    <li>Portfolio trackers & wallet monitoring</li>
+                                    <li>Risk management & scam detection systems</li>
+                                    <li>Anything requiring deep Python + on-chain expertise</li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div>
