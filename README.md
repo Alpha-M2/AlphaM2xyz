@@ -1,8 +1,9 @@
 # Alpha_M2 Portfolio - AlphaM2.xyz
 
-> Elite DeFi portfolio built with Next.js 15, TypeScript, and Tailwind CSS.
+> Elite DeFi portfolio & modern web experience built with Next.js 16, React 19, TypeScript, and Tailwind CSS.
 
 ## 🚀 Quick Start
+
 ```bash
 # Install dependencies
 npm install
@@ -14,6 +15,7 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 📦 Build & Deploy
+
 ```bash
 # Build for production
 npm run build
@@ -27,29 +29,32 @@ vercel --prod
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
+- **Library**: React 19
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
-- **Deployment**: Vercel
+- **Optimization**: `next/image` for performance
 
-## 📝 Customization
+## 📝 Features & Sections
 
-### Add Your Profile Picture
-Replace the placeholder in `app/page.tsx`:
-```tsx
-<img 
-  src="/profile.jpg"
-  alt="Alpha_M2"
-  className="w-full h-full object-cover"
-/>
-```
+### Experiences
+A curated list of high-impact projects and on-chain analytics dashboards:
+- **QuintovaBot**: Private Solana memecoin alpha detector.
+- **Crypto News Aggregator (BlockoraBot)**: Real-time news aggregation pipeline.
+- **Portfolio Tracker Pro**: Multi-chain asset tracking.
+- **Dune Dashboards**:
+  - Top 20 ETH NFT Collections
+  - Pumpswap Most Traded Tokens
+  - Base Chain Performance Comparison
 
-### Update Project Links
-Edit the `projects` array in `app/page.tsx` and replace `#` with real URLs.
+### About Me
+Detailed bio, skills assessment, and service offerings (Custom bots, Dune dashboards, MEV tools).
 
-### Add Dune Dashboards
-Get embed URLs from Dune Analytics and update the `duneBoards` array.
+### Customization
+- **Profile Image**: Uses `next/image` for optimized loading from `/public`.
+- **Project Data**: Easily editable `projects` array in `app/page.tsx`.
+- **Config**: `next.config.js` configured with `remotePatterns` for external image sources (e.g., Dune).
 
 ## 🌐 Custom Domain
 

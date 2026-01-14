@@ -66,7 +66,7 @@ export default function Portfolio() {
             title: "AlphaM2 Portfolio",
             description: "Modern personal portfolio website with task-based agentic development workflow.",
             impact: "High Performance",
-            tech: ["Next.js 16", "React 19", "Tailwind CSS"],
+            tech: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS"],
             link: "https://github.com/Alpha-M2/AlphaM2xyz",
             github: "https://github.com/Alpha-M2/AlphaM2xyz"
         }
