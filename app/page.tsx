@@ -21,8 +21,8 @@ export default function Portfolio() {
             description: "Real-time multi-chain portfolio tracking with PnL analytics, gas optimization alerts, and whale wallet monitoring.",
             impact: "Tracking $2M+ in assets",
             tech: ["Python", "Web3.py", "FastAPI", "PostgreSQL"],
-            link: "#",
-            github: "#"
+            link: "https://github.com/Alpha-M2/crypto-portfolio-tracker",
+            github: "https://github.com/Alpha-M2/crypto-portfolio-tracker"
         },
         {
             title: "Token Launch Detector",
@@ -37,23 +37,8 @@ export default function Portfolio() {
             description: "A crypto news aggregation pipeline that collects, normalizes, deduplicates, summarizes, and delivers real-time crypto news directly to Telegram subscribers.",
             impact: "Live Bot: @BlockoraBot",
             tech: ["Python", "MongoDB", "RSS", "Web Scraping", "AsyncIO", "Telegram Bot API"],
-            link: "#",
-            github: "#"
-        },
-        {
-            title: "MEV Sandwich Attack Monitor",
-            description: "Real-time detection and analysis of MEV sandwich attacks with victim wallet notifications.",
-            impact: "Protected 200+ traders",
-            tech: ["Python", "DuneSQL", "Flashbots API"],
-            link: "#",
-            github: "#"
-        },
-        {
-            title: "DeFi Protocol Health Dashboard",
-            description: "TVL trends, user growth, revenue metrics across top 20 protocols. Real-time risk indicators.",
-            impact: "12K+ views",
-            tech: ["DuneSQL", "Data Viz", "On-Chain"],
-            link: "https://dune.com/embeds/3234567/5432109"
+            link: "https://github.com/Alpha-M2/crypto-news-aggregator",
+            github: "https://github.com/Alpha-M2/crypto-news-aggregator"
         },
         {
             title: "Whale Wallet Activity Tracker",
@@ -63,12 +48,33 @@ export default function Portfolio() {
             link: "https://dune.com/embeds/3234568/5432110"
         },
         {
+            title: "Top 20 ETH NFT Collections",
+            description: "Floor price performance in USD and ETH across 7 days, 1, 3, and 6 months intervals.",
+            impact: "NFT Analytics",
+            tech: ["DuneSQL", "NFT Market"],
+            link: "https://dune.com/alpham2_eth/top-20-ethereum-nft-collections-by-volume"
+        },
+        {
+            title: "Pumpswap Most Traded Tokens",
+            description: "Analysis of the most traded tokens on Pumpswap over the last 7 days.",
+            impact: "DEX Analytics",
+            tech: ["DuneSQL", "DEX Volume"],
+            link: "https://dune.com/alpham2_eth/most-traded-tokens-on-pumpswap-over-the-last-7-days"
+        },
+        {
+            title: "Base Chain Performance",
+            description: "Performance comparison on Base Chain over the last 3 months.",
+            impact: "L2 Analytics",
+            tech: ["DuneSQL", "L2 Analysis"],
+            link: "https://dune.com/alpham2_eth/perfomance-comparison-on-base-chain-over-the-last-3-months"
+        },
+        {
             title: "AlphaM2 Portfolio",
             description: "Modern personal portfolio website with task-based agentic development workflow.",
             impact: "High Performance",
             tech: ["Next.js 16", "React 19", "Tailwind CSS"],
-            link: "#",
-            github: "#"
+            link: "https://github.com/Alpha-M2/AlphaM2xyz",
+            github: "https://github.com/Alpha-M2/AlphaM2xyz"
         }
     ];
 
