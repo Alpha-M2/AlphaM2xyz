@@ -25,10 +25,10 @@ export default function Portfolio() {
             github: "https://github.com/Alpha-M2/crypto-portfolio-tracker"
         },
         {
-            title: "Token Launch Detector",
-            description: "Mempool scanner detecting new token launches on DEXs with instant rug pull risk scoring.",
-            impact: "Saved users $100K+",
-            tech: ["Python", "Ethers.js", "Telegram Bot API"],
+            title: "QuintovaBot",
+            description: "Solana Memecoin Alpha Detection Bot - Real-time Solana token monitoring with advanced filtering, smart wallet tracking, and cabal detection.",
+            impact: "Private Access Only (Coming Soon)",
+            tech: ["Python", "Solana RPC", "Telegram Bot API", "Redis", "AsyncIO"],
             link: "#",
             github: "#"
         },
@@ -40,13 +40,7 @@ export default function Portfolio() {
             link: "https://github.com/Alpha-M2/crypto-news-aggregator",
             github: "https://github.com/Alpha-M2/crypto-news-aggregator"
         },
-        {
-            title: "Whale Wallet Activity Tracker",
-            description: "Top 100 whale movements, accumulation patterns, and market impact analysis.",
-            impact: "8K+ views",
-            tech: ["DuneSQL", "Whale Watch"],
-            link: "https://dune.com/embeds/3234568/5432110"
-        },
+
         {
             title: "Top 20 ETH NFT Collections",
             description: "Floor price performance in USD and ETH across 7 days, 1, 3, and 6 months intervals.",
@@ -242,7 +236,7 @@ export default function Portfolio() {
                 <div className="max-w-5xl mx-auto">
                     <div className="mb-16">
                         <h2 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
-                            The Builder
+                            About Me
                         </h2>
                     </div>
 
