@@ -65,11 +65,7 @@ Detailed bio, skills assessment, and service offerings (Custom bots, Dune dashbo
 
 **Status**: ✅ LIVE & DEPLOYED
 
-1. Go to Vercel Dashboard → Settings → Domains
-
-1. Go to Vercel Dashboard → Settings → Domains
-2. Add `AlphaM2.xyz`
-3. Update DNS records at your registrar
+Domain: `Alpha-M2.xyz`
 
 ## 📧 Contact
 
