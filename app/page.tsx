@@ -124,20 +124,20 @@ export default function Portfolio() {
                             href="https://twitter.com/Alpha_M2"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group px-8 py-4 bg-violet-600 hover:bg-violet-500 transition-all rounded-lg font-semibold flex items-center gap-2"
+                            className="group px-8 py-4 bg-violet-600/90 hover:bg-violet-500 transition-all rounded-lg font-semibold flex items-center gap-2 backdrop-blur-sm"
                         >
                             DM for Collabs
                             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </a>
                         <a
                             href="mailto:Alphaofweb3@gmail.com"
-                            className="px-8 py-4 border border-violet-600/50 hover:border-violet-500 hover:bg-violet-950/30 transition-all rounded-lg font-semibold"
+                            className="px-8 py-4 bg-black/60 border border-violet-600/50 hover:border-violet-500 hover:bg-violet-950/80 transition-all rounded-lg font-semibold backdrop-blur-sm"
                         >
                             Email for Gigs
                         </a>
                     </div>
 
-                    <div className="mt-16 flex justify-center gap-8 text-sm text-gray-500">
+                    <div className="mt-16 flex justify-center gap-8 text-sm text-gray-400 bg-black/60 py-4 rounded-xl backdrop-blur-md border border-white/5">
                         <div className="flex items-center gap-2">
                             <Terminal className="w-4 h-4 text-violet-400" />
                             <span>10+ Projects Shipped</span>
@@ -172,7 +172,7 @@ export default function Portfolio() {
                         {projects.map((project, idx) => (
                             <div
                                 key={idx}
-                                className="group bg-gradient-to-br from-violet-950/20 to-indigo-950/20 border border-violet-900/30 rounded-2xl p-8 hover:border-violet-600/50 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-900/20 flex flex-col"
+                                className="group bg-black/80 backdrop-blur-md border border-white/10 rounded-2xl p-8 hover:border-violet-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-900/20 flex flex-col z-10"
                             >
                                 <div className="flex items-start justify-between mb-4">
                                     <h3 className="text-2xl font-bold text-white group-hover:text-violet-400 transition-colors">
@@ -223,12 +223,12 @@ export default function Portfolio() {
             <section id="about" className="relative py-32 px-6">
                 <div className="max-w-5xl mx-auto">
                     <div className="mb-16">
-                        <h2 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
+                        <h2 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400 relative z-10">
                             About Me
                         </h2>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-16">
+                    <div className="grid md:grid-cols-2 gap-16 bg-black/80 backdrop-blur-md p-8 rounded-3xl border border-white/10 z-10 relative">
                         <div>
                             <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                                 Started in traditional finance, pivoted to crypto in 2021. Worked as a Community Manager/Moderator
@@ -291,12 +291,12 @@ export default function Portfolio() {
                         Open for collaborations, contract work, and building the future of DeFi.
                     </p>
 
-                    <div className="flex flex-wrap justify-center gap-6">
+                    <div className="flex flex-wrap justify-center gap-6 relative z-10">
                         <a
                             href="https://x.com/Alpha_M2"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 px-8 py-4 bg-violet-950/30 border border-violet-800/50 hover:border-violet-600 hover:bg-violet-950/50 rounded-xl transition-all"
+                            className="group flex items-center gap-3 px-8 py-4 bg-black/80 border border-violet-800/50 hover:border-violet-600 hover:bg-black rounded-xl transition-all backdrop-blur-md"
                         >
                             <Twitter className="w-6 h-6 text-violet-400" />
                             <span className="font-semibold">@Alpha_M2</span>
@@ -304,7 +304,7 @@ export default function Portfolio() {
 
                         <a
                             href="mailto:Alphaofweb3@gmail.com"
-                            className="group flex items-center gap-3 px-8 py-4 bg-violet-950/30 border border-violet-800/50 hover:border-violet-600 hover:bg-violet-950/50 rounded-xl transition-all"
+                            className="group flex items-center gap-3 px-8 py-4 bg-black/80 border border-violet-800/50 hover:border-violet-600 hover:bg-black rounded-xl transition-all backdrop-blur-md"
                         >
                             <Mail className="w-6 h-6 text-violet-400" />
                             <span className="font-semibold">Alphaofweb3@gmail.com</span>
@@ -314,7 +314,7 @@ export default function Portfolio() {
                             href="https://t.me/Alpha_M2"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 px-8 py-4 bg-violet-950/30 border border-violet-800/50 hover:border-violet-600 hover:bg-violet-950/50 rounded-xl transition-all"
+                            className="group flex items-center gap-3 px-8 py-4 bg-black/80 border border-violet-800/50 hover:border-violet-600 hover:bg-black rounded-xl transition-all backdrop-blur-md"
                         >
                             <Send className="w-6 h-6 text-violet-400" />
                             <span className="font-semibold">Telegram</span>
@@ -324,7 +324,7 @@ export default function Portfolio() {
                             href="https://github.com/Alpha-M2"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 px-8 py-4 bg-violet-950/30 border border-violet-800/50 hover:border-violet-600 hover:bg-violet-950/50 rounded-xl transition-all"
+                            className="group flex items-center gap-3 px-8 py-4 bg-black/80 border border-violet-800/50 hover:border-violet-600 hover:bg-black rounded-xl transition-all backdrop-blur-md"
                         >
                             <Github className="w-6 h-6 text-violet-400" />
                             <span className="font-semibold">GitHub</span>
@@ -334,7 +334,7 @@ export default function Portfolio() {
                             href="https://www.linkedin.com/in/alpham2/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 px-8 py-4 bg-violet-950/30 border border-violet-800/50 hover:border-violet-600 hover:bg-violet-950/50 rounded-xl transition-all"
+                            className="group flex items-center gap-3 px-8 py-4 bg-black/80 border border-violet-800/50 hover:border-violet-600 hover:bg-black rounded-xl transition-all backdrop-blur-md"
                         >
                             <Linkedin className="w-6 h-6 text-violet-400" />
                             <span className="font-semibold">LinkedIn</span>

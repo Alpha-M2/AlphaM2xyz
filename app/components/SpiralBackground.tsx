@@ -53,41 +53,58 @@ export default function SpiralBackground() {
         const particles = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
 
-        // --- Neon Palette Generator ---
-        // Sticking to "1 or 2 colors" rule
-        const getColorsForState = (type: EquationType): number[][] => {
-            switch (type) {
-                case EquationType.LORENZ:
-                    // Hot Pink & Red (Reference: Pink Spiral)
-                    return [[255, 0, 128], [255, 50, 50]];
-                case EquationType.AIZAWA:
-                    // Electric Green & Yellow (Reference: Green Object)
-                    return [[0, 255, 64], [200, 255, 0]];
-                case EquationType.CHEN:
-                    // Cyan & Deep Blue
-                    return [[0, 255, 255], [0, 100, 255]];
-                case EquationType.HALVORSEN:
-                    // Bright Gold & Orange
-                    return [[255, 200, 0], [255, 100, 0]];
-                case EquationType.FLOW_FIELD:
-                    // Electric Violet
-                    return [[180, 0, 255], [100, 50, 255]];
-                case EquationType.GALAXY:
-                    // Pure White & Ice Blue
-                    return [[255, 255, 255], [200, 220, 255]];
+        // --- Infinite Neon Gradient Engine ---
+        // Generates a random "Hot Neon" theme for each state.
+        // Rule: "One dominant color per state" but "Gradients/Blending Encouraged".
+
+        let currentStateHue = Math.random() * 360;
+        let nextStateHue = Math.random() * 360;
+
+        const applyColors = (baseHue: number) => {
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                // "Go Wild with Blending":
+                // Primary Hue + Random Variation (Analogous Gradient)
+                // This creates a rich, "deep" color look rather than flat single-color.
+                const variance = (Math.random() - 0.5) * 60; // +/- 30 degrees variance
+                const hue = baseHue + variance;
+
+                // Neon brightness strategies:
+                // 1. High Saturation (80-100%)
+                // 2. High Lightness (50-80%) for "Glow"
+                const sat = 80 + Math.random() * 20;
+                const light = 50 + Math.random() * 30;
+
+                // Convert HSL to RGB for Canvas
+                const [r, g, b] = hslToRgb(hue / 360, sat / 100, light / 100);
+
+                colors[i] = r;
+                colors[i + 1] = g;
+                colors[i + 2] = b;
             }
-            return [[255, 255, 255]];
         };
 
-        const applyColors = (type: EquationType) => {
-            const palette = getColorsForState(type);
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                const color = palette[Math.floor(Math.random() * palette.length)];
-                colors[i] = color[0];
-                colors[i + 1] = color[1];
-                colors[i + 2] = color[2];
+        // Helper: HSL to RGB
+        function hslToRgb(h: number, s: number, l: number) {
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l; // achromatic
+            } else {
+                const hue2rgb = (p: number, q: number, t: number) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
             }
-        };
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
 
         const initParticles = () => {
             for (let i = 0; i < particleCount * 3; i += 3) {
@@ -95,7 +112,7 @@ export default function SpiralBackground() {
                 particles[i + 1] = (Math.random() - 0.5) * 50;
                 particles[i + 2] = (Math.random() - 0.5) * 50;
             }
-            applyColors(currentType);
+            applyColors(currentStateHue);
         };
 
         const resize = () => {
@@ -110,7 +127,7 @@ export default function SpiralBackground() {
 
         const getAttractorDelta = (type: EquationType, x: number, y: number, z: number): { dx: number, dy: number, dz: number } => {
             let dx = 0, dy = 0, dz = 0;
-            const dt = 0.008; // slightly slower step for stability
+            const dt = 0.008;
 
             switch (type) {
                 case EquationType.LORENZ:
@@ -124,7 +141,7 @@ export default function SpiralBackground() {
                     dz = x * y - 3 * z;
                     break;
                 case EquationType.HALVORSEN:
-                    const a = 1.89; // tweaked parameter
+                    const a = 1.89;
                     dx = -a * x - 4 * y - 4 * z - y * y;
                     dy = -a * y - 4 * z - 4 * x - z * z;
                     dz = -a * z - 4 * x - 4 * y - x * x;
@@ -160,7 +177,6 @@ export default function SpiralBackground() {
                 isTransitioning = true;
                 transitionProgress = 0;
 
-                // Smart cycle
                 const types = [
                     EquationType.LORENZ,
                     EquationType.AIZAWA,
@@ -173,27 +189,37 @@ export default function SpiralBackground() {
                 if (types[nextIdx] === currentType) nextIdx = (nextIdx + 1) % types.length;
                 nextType = types[nextIdx];
 
-                cycleDuration = 300 + Math.random() * 200; // 5-8s hold
+                // Pick a WILD new random Neon Hue
+                // Ensure it is distinct from current (shift by at least 60deg)
+                nextStateHue = (currentStateHue + 60 + Math.random() * 240) % 360;
+
+                cycleDuration = 300 + Math.random() * 200;
             }
 
             // --- Color Morph Logic ---
-            // When transitioning, we also interpolate the colors to the NEW palette target
-            // Ideally we just lerp the RGB values of each particle towards a new random color from the next palette
             if (isTransitioning) {
                 transitionProgress += 1 / transitionDuration;
 
-                // Color morphing 1% per frame towards new palette default
-                // This is cheaper than calculating full Lerp for every particle every frame
-                // just random chance to swap color
-                if (time % 5 === 0) { // Optimization
-                    let nextPalette = getColorsForState(nextType);
-                    for (let i = 0; i < particleCount * 3; i += 3) {
-                        // 5% of particles change color per check
-                        if (Math.random() < 0.05) {
-                            const c = nextPalette[Math.floor(Math.random() * nextPalette.length)];
-                            colors[i] = c[0]; colors[i + 1] = c[1]; colors[i + 2] = c[2];
+                // Smoothly blend the Hue? Or Particle Flip?
+                // User said "Ingredients/Blending is encouraged".
+                // Let's drift the "Current State Hue" towards "Target Hue".
+                // BUT circular interpolation for Hue is tricky.
 
-                            // Respawn on transition
+                // Simpler: Just allow particles to randomly flip to the new Gradient theme
+                if (time % 5 === 0) {
+                    for (let i = 0; i < particleCount * 3; i += 3) {
+                        // Flip to new gradient palette
+                        if (Math.random() < 0.05) {
+                            const variance = (Math.random() - 0.5) * 60;
+                            const hue = nextStateHue + variance;
+                            const sat = 80 + Math.random() * 20;
+                            const light = 50 + Math.random() * 30;
+                            const [r, g, b] = hslToRgb(hue / 360, sat / 100, light / 100);
+
+                            colors[i] = r;
+                            colors[i + 1] = g;
+                            colors[i + 2] = b;
+
                             if (Math.random() < 0.1) {
                                 particles[i] = (Math.random() - 0.5) * 20;
                                 particles[i + 1] = (Math.random() - 0.5) * 20;
@@ -205,10 +231,11 @@ export default function SpiralBackground() {
 
                 if (transitionProgress >= 1) {
                     currentType = nextType;
+                    currentStateHue = nextStateHue;
                     isTransitioning = false;
                     stateTimer = 0;
                     transitionProgress = 0;
-                    applyColors(currentType); // Snap remaining
+                    applyColors(currentStateHue); // Snap remaining
                 }
             }
 
