@@ -9,98 +9,149 @@ export default function SpiralBackground() {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Optimization: no alpha channel for bg
         if (!ctx) return;
 
         let animationFrameId: number;
         let time = 0;
 
+        // Configuration
+        const particleCount = 600; // Balanced for performance and look
+        const armCount = 3; // Number of spiral arms
+        const armSpread = 0.5; // How "loose" the arms are
+        const rotationSpeed = 0.0005; // Very slow, hypnotic rotation
+
+        // Color Palettes (Deep Space)
+        const palettes = [
+            // Deep Purple / Blue
+            ['#0f172a', '#312e81', '#4c1d95', '#581c87', '#7c3aed'],
+            // Cosmic Teal / Void
+            ['#020617', '#1e1b4b', '#115e59', '#0f766e', '#2dd4bf'],
+            // Mystical Gold / Noir
+            ['#000000', '#1c1917', '#78350f', '#b45309', '#f59e0b']
+        ];
+
+        // Dimensions
+        let width = 0;
+        let height = 0;
+        let cx = 0;
+        let cy = 0;
+
+        interface Particle {
+            angle: number;
+            radius: number;
+            speed: number;
+            size: number;
+            color: string;
+            orbitOffset: number;
+            drift: number;
+            pulsePhase: number;
+        }
+
+        let particles: Particle[] = [];
+
+        const initParticles = () => {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                // Logarithmic distribution for density near center
+                const randomDist = Math.pow(Math.random(), 1.5);
+
+                // Assign to an arm with some randomness
+                const armIndex = i % armCount;
+                const armAngle = (armIndex / armCount) * Math.PI * 2;
+                const spread = (Math.random() - 0.5) * armSpread; // Scatter around arm
+
+                particles.push({
+                    angle: armAngle + spread, // Base angle
+                    radius: randomDist, // Normalized radius (0-1)
+                    speed: (Math.random() * 0.002) + 0.001, // Individual drift
+                    size: Math.random() * 2 + 0.5,
+                    color: palettes[0][Math.floor(Math.random() * palettes[0].length)],
+                    orbitOffset: Math.random() * Math.PI * 2,
+                    drift: (Math.random() - 0.5) * 0.1,
+                    pulsePhase: Math.random() * Math.PI * 2
+                });
+            }
+        };
+
         const resize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            cx = width / 2;
+            cy = height / 2;
+            initParticles();
         };
 
         window.addEventListener('resize', resize);
         resize();
 
-        // Particle configuration
-        const particleCount = 1000; // Adjust for density
-        const particles: { x: number; y: number; z: number; renderX: number; renderY: number; size: number; baseColor: string }[] = [];
-
-        const colors = [
-            'rgba(139, 92, 246, 0.8)', // Violet
-            'rgba(168, 85, 247, 0.8)', // Purple
-            'rgba(99, 102, 241, 0.8)', // Indigo
-            'rgba(192, 132, 252, 0.6)' // Lighter Purple
-        ];
-
-
-        for (let i = 0; i < particleCount; i++) {
-            // Distribute particles in a spiral or cylindrical volume
-            const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * 800; // Spread radius
-            const depth = Math.random() * 2000; // Depth spread
-
-            particles.push({
-                x: Math.cos(angle) * radius,
-                y: Math.sin(angle) * radius,
-                z: depth - 1000, // Center z around 0
-                renderX: 0,
-                renderY: 0,
-                size: Math.random() * 2,
-                baseColor: colors[Math.floor(Math.random() * colors.length)]
-            });
-        }
-
         const render = () => {
-            time += 0.002; // Rotation speed
+            time += 1;
 
-            // Clear with a very slight fade for potential trails (optional, using clearRect for crispness here)
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Standard clear
+            // Slow Color Shift Cycle (every ~30s)
+            const cycleSpeed = 0.0005;
+            const cycle = (Date.now() * cycleSpeed) % (palettes.length * Math.PI);
+            const paletteIndex = Math.floor(Math.abs(Math.sin(cycle)) * palettes.length) % palettes.length;
+            const currentPalette = palettes[paletteIndex];
 
-            // Or use this for a subtle trail effect:
-            // ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Subtle Trails: instead of clearRect, draw semi-transparent rect
+            ctx.fillStyle = 'rgba(5, 5, 10, 0.2)'; // Very dark fade, creating trails
+            ctx.fillRect(0, 0, width, height);
 
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
+            // Global Rotation
+            const globalRotation = time * rotationSpeed;
 
-            particles.forEach(p => {
-                // Rotate around Z axis (2D rotation)
-                // const rotX = p.x * Math.cos(time) - p.y * Math.sin(time);
-                // const rotY = p.x * Math.sin(time) + p.y * Math.cos(time);
+            particles.forEach((p, i) => {
+                // Calculate position based on spiral equation
+                // r = a * e^(b * theta) ... simplified for visual effect here
 
-                // Let's do a 3D spiral rotation effect
-                // Rotate the entire cloud
-                const cosT = Math.cos(time);
-                const sinT = Math.sin(time);
+                // Current spiral angle including rotation vs distance
+                // Twist factor: further particles rotate slower or Lag behind? 
+                // Let's make a galaxy twist: inner moves faster angularly, or just simple rigid body + twist
 
-                // Rotate around Z
-                let x1 = p.x * cosT - p.y * sinT;
-                let y1 = p.x * sinT + p.y * cosT;
-                let z1 = p.z;
+                const distance = p.radius * Math.max(width, height) * 0.8;
 
-                // Add a "flow" through the Z axis to mimic moving through a wormhole
-                z1 -= 2; // Move "towards" camera
-                if (z1 < -1000) z1 += 2000; // Reset to back
+                // Galaxy twist: angle offset increases with distance (winding arms)
+                const spiralTwist = p.radius * 5;
 
-                // Simple perspective projection
-                const fov = 1000;
-                const scale = fov / (fov + z1);
+                const currentAngle = p.angle + globalRotation + spiralTwist + p.drift;
 
-                p.renderX = centerX + x1 * scale;
-                p.renderY = centerY + y1 * scale;
-                const renderSize = Math.max(0.1, p.size * scale);
+                const x = cx + Math.cos(currentAngle) * distance;
+                const y = cy + Math.sin(currentAngle) * distance;
 
-                // Draw particle
+                // Breathing/Pulsing effect
+                const pulse = Math.sin(time * 0.02 + p.pulsePhase);
+                const drawSize = p.size * (1 + pulse * 0.2); // +/- 20% size
+                const opacity = Math.max(0.1, Math.min(0.8, (1 - p.radius) + pulse * 0.1)); // Fade out at edges
+
+                // Periodic color update (expensive to do every frame, so we just pick from palette occasionally or blend? 
+                // For performance, just stick to assigned color but maybe simple opacity shift is enough)
+                // Let's try to shift color slowly towards current palette
+                if (Math.random() < 0.001) {
+                    p.color = currentPalette[Math.floor(Math.random() * currentPalette.length)];
+                }
+
                 ctx.beginPath();
-                ctx.arc(p.renderX, p.renderY, renderSize, 0, Math.PI * 2);
-                ctx.fillStyle = p.baseColor;
-                ctx.fill();
+                ctx.arc(x, y, drawSize, 0, Math.PI * 2);
 
-                // Add simple connection lines for "constellation" look if close (optional - can be heavy)
-                // Keeping it just particles for clean "professional" look as requested
+                // Glow effect
+                ctx.shadowBlur = drawSize * 4;
+                ctx.shadowColor = p.color;
+
+                ctx.fillStyle = p.color;
+                // Hack for opacity with hex colors: use globalAlpha
+                ctx.globalAlpha = opacity;
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+                ctx.shadowBlur = 0;
             });
+
+            // Draw center "void" or glow
+            const centerGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, 200);
+            centerGradient.addColorStop(0, 'rgba(10, 0, 30, 0)');
+            centerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Transparent
+            ctx.fillStyle = centerGradient;
+            ctx.fillRect(0, 0, width, height);
 
             animationFrameId = requestAnimationFrame(render);
         };
@@ -117,7 +168,6 @@ export default function SpiralBackground() {
         <canvas
             ref={canvasRef}
             className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-black"
-            style={{ opacity: 1 }}
         />
     );
 }
