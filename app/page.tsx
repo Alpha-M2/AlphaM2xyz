@@ -1,19 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { Github, Twitter, Mail, ExternalLink, ChevronRight, Terminal, TrendingUp, Shield, Zap, Send, Linkedin } from 'lucide-react';
+import Header from './components/Header';
+import SpiralBackground from './components/SpiralBackground';
 
 export default function Portfolio() {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
 
     const projects = [
         {
@@ -28,7 +21,7 @@ export default function Portfolio() {
             title: "QuintovaBot",
             description: "Solana Memecoin Alpha Detection Bot - Real-time Solana token monitoring with advanced filtering, smart wallet tracking, and cabal detection.",
             impact: "Private Access Only (Coming Soon)",
-            tech: ["Python", "Solana RPC", "Telegram Bot API", "Redis", "AsyncIO"],
+            tech: ["Python", "Helius", "Telegram Bot API", "Redis", "AsyncIO"],
             link: "#",
             github: "#"
         },
@@ -84,13 +77,8 @@ export default function Portfolio() {
 
     return (
         <div className="min-h-screen bg-black text-white overflow-x-hidden">
-            {/* Ambient background gradient */}
-            <div
-                className="fixed inset-0 opacity-30 pointer-events-none"
-                style={{
-                    background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(139, 92, 246, 0.15), transparent 40%)`
-                }}
-            />
+            <SpiralBackground />
+            <Header />
 
             {/* Hero Section */}
             <section id="hero" className="relative min-h-screen flex items-center justify-center px-6">
