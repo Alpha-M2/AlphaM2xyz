@@ -48,6 +48,11 @@ A curated list of high-impact projects and on-chain analytics dashboards:
   - Pumpswap Most Traded Tokens
   - Base Chain Performance Comparison
 
+### Design & Visuals
+- **Infinite Neon Background**: Procedural math engine generating endless Chaotic Attractors.
+- **Dynamic Gradients**: Real-time color generation with smooth 5-second transitions.
+- **Glassmorphism**: High-contrast UI with opaque backdrops for maximum readability.
+
 ### About Me
 Detailed bio, skills assessment, and service offerings (Custom bots, Dune dashboards, MEV tools).
 
@@ -56,7 +61,11 @@ Detailed bio, skills assessment, and service offerings (Custom bots, Dune dashbo
 - **Project Data**: Easily editable `projects` array in `app/page.tsx`.
 - **Config**: `next.config.js` configured with `remotePatterns` for external image sources (e.g., Dune).
 
-## 🌐 Custom Domain
+## 🌐 Deployment
+
+**Status**: ✅ LIVE & DEPLOYED
+
+1. Go to Vercel Dashboard → Settings → Domains
 
 1. Go to Vercel Dashboard → Settings → Domains
 2. Add `AlphaM2.xyz`

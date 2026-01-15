@@ -72,7 +72,8 @@ export default function Portfolio() {
         { name: "DeFi Protocols", level: 92 },
         { name: "Community Management", level: 85 },
         { name: "Bot Development", level: 90 },
-        { name: "On-Chain Analysis", level: 93 }
+        { name: "On-Chain Analysis", level: 93 },
+        { name: "Typescript", level: 91 }
     ];
 
     return (
@@ -253,6 +254,7 @@ export default function Portfolio() {
                                     <li>MEV bots & opportunities detection</li>
                                     <li>Portfolio trackers & wallet monitoring</li>
                                     <li>Risk management & scam detection systems</li>
+                                    <li>Website Creation</li>
                                     <li>Anything requiring deep Python + on-chain expertise</li>
                                 </ul>
                             </div>
