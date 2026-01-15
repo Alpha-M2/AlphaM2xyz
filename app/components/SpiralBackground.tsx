@@ -9,149 +9,150 @@ export default function SpiralBackground() {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext('2d', { alpha: false }); // Optimization: no alpha channel for bg
+        const ctx = canvas.getContext('2d', { alpha: false });
         if (!ctx) return;
 
         let animationFrameId: number;
-        let time = 0;
 
         // Configuration
-        const particleCount = 600; // Balanced for performance and look
-        const armCount = 3; // Number of spiral arms
-        const armSpread = 0.5; // How "loose" the arms are
-        const rotationSpeed = 0.0005; // Very slow, hypnotic rotation
+        const particleCount = 2000;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
 
-        // Color Palettes (Deep Space)
-        const palettes = [
-            // Deep Purple / Blue
-            ['#0f172a', '#312e81', '#4c1d95', '#581c87', '#7c3aed'],
-            // Cosmic Teal / Void
-            ['#020617', '#1e1b4b', '#115e59', '#0f766e', '#2dd4bf'],
-            // Mystical Gold / Noir
-            ['#000000', '#1c1917', '#78350f', '#b45309', '#f59e0b']
-        ];
-
-        // Dimensions
-        let width = 0;
-        let height = 0;
-        let cx = 0;
-        let cy = 0;
-
-        interface Particle {
-            angle: number;
-            radius: number;
-            speed: number;
-            size: number;
-            color: string;
-            orbitOffset: number;
-            drift: number;
-            pulsePhase: number;
+        // Math Engine State
+        // The equation is roughly:
+        // dx = sin(t*A + y*B + C) * D
+        // dy = cos(t*E + x*F + G) * H
+        interface Coefficients {
+            a: number; b: number; c: number; d: number;
+            e: number; f: number; g: number; h: number;
+            zoom: number;
         }
 
-        let particles: Particle[] = [];
+        let currentCoeffs: Coefficients = generateCoeffs();
+        let targetCoeffs: Coefficients = generateCoeffs();
+        let transitionProgress = 0;
 
-        const initParticles = () => {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                // Logarithmic distribution for density near center
-                const randomDist = Math.pow(Math.random(), 1.5);
+        // Color Engine
+        let currentColor = { r: 10, g: 10, b: 20 };
+        let targetColor = { r: 10, g: 10, b: 20 };
 
-                // Assign to an arm with some randomness
-                const armIndex = i % armCount;
-                const armAngle = (armIndex / armCount) * Math.PI * 2;
-                const spread = (Math.random() - 0.5) * armSpread; // Scatter around arm
+        function generateCoeffs(): Coefficients {
+            return {
+                a: (Math.random() - 0.5) * 0.02,
+                b: (Math.random() - 0.5) * 0.02,
+                c: (Math.random() - 0.5) * 2,
+                d: (Math.random() - 0.5) * 2,
+                e: (Math.random() - 0.5) * 0.02,
+                f: (Math.random() - 0.5) * 0.02,
+                g: (Math.random() - 0.5) * 2,
+                h: (Math.random() - 0.5) * 2,
+                zoom: Math.random() * 0.005 + 0.001
+            };
+        }
 
-                particles.push({
-                    angle: armAngle + spread, // Base angle
-                    radius: randomDist, // Normalized radius (0-1)
-                    speed: (Math.random() * 0.002) + 0.001, // Individual drift
-                    size: Math.random() * 2 + 0.5,
-                    color: palettes[0][Math.floor(Math.random() * palettes[0].length)],
-                    orbitOffset: Math.random() * Math.PI * 2,
-                    drift: (Math.random() - 0.5) * 0.1,
-                    pulsePhase: Math.random() * Math.PI * 2
-                });
-            }
-        };
+        function generateColor() {
+            // Generates a deep space base color (dark purples, blues, teals)
+            const hue = Math.random() * 360;
+            return {
+                r: Math.floor(Math.sin(hue * 0.017) * 20 + 20),
+                g: Math.floor(Math.sin((hue + 120) * 0.017) * 20 + 20),
+                b: Math.floor(Math.sin((hue + 240) * 0.017) * 40 + 60)
+            };
+        }
+
+        // Particles
+        const particles = new Float32Array(particleCount * 2); // x, y interleaved
+        for (let i = 0; i < particleCount * 2; i += 2) {
+            particles[i] = Math.random() * width;
+            particles[i + 1] = Math.random() * height;
+        }
+
+        let time = 0;
+        let lastTargetChange = 0;
+        const transitionDuration = 300; // frames (~5s)
 
         const resize = () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            cx = width / 2;
-            cy = height / 2;
-            initParticles();
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Clean slate on resize to avoid stretching
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         };
-
         window.addEventListener('resize', resize);
         resize();
 
+        const lerp = (start: number, end: number, t: number) => start * (1 - t) + end * t;
+
         const render = () => {
-            time += 1;
+            time++;
 
-            // Slow Color Shift Cycle (every ~30s)
-            const cycleSpeed = 0.0005;
-            const cycle = (Date.now() * cycleSpeed) % (palettes.length * Math.PI);
-            const paletteIndex = Math.floor(Math.abs(Math.sin(cycle)) * palettes.length) % palettes.length;
-            const currentPalette = palettes[paletteIndex];
+            // 1. Manage State Transition (Mutate genes every 300 frames / 5s)
+            transitionProgress++;
+            if (transitionProgress > transitionDuration) {
+                currentCoeffs = { ...targetCoeffs }; // Snap to target
+                targetCoeffs = generateCoeffs();   // Pick new target
+                currentColor = { ...targetColor };
+                targetColor = generateColor();
+                transitionProgress = 0;
+            }
 
-            // Subtle Trails: instead of clearRect, draw semi-transparent rect
-            ctx.fillStyle = 'rgba(5, 5, 10, 0.2)'; // Very dark fade, creating trails
-            ctx.fillRect(0, 0, width, height);
+            // Interpolate coefficients for this frame
+            const t = transitionProgress / transitionDuration;
+            // Ease in-out
+            const ease = t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
-            // Global Rotation
-            const globalRotation = time * rotationSpeed;
+            const A = lerp(currentCoeffs.a, targetCoeffs.a, ease);
+            const B = lerp(currentCoeffs.b, targetCoeffs.b, ease);
+            const C = lerp(currentCoeffs.c, targetCoeffs.c, ease);
+            const D = lerp(currentCoeffs.d, targetCoeffs.d, ease);
+            const E = lerp(currentCoeffs.e, targetCoeffs.e, ease);
+            const F = lerp(currentCoeffs.f, targetCoeffs.f, ease);
+            const G = lerp(currentCoeffs.g, targetCoeffs.g, ease);
+            const H = lerp(currentCoeffs.h, targetCoeffs.h, ease);
+            const ZOOM = lerp(currentCoeffs.zoom, targetCoeffs.zoom, ease);
 
-            particles.forEach((p, i) => {
-                // Calculate position based on spiral equation
-                // r = a * e^(b * theta) ... simplified for visual effect here
+            // Interpolate Background Color
+            const R = lerp(currentColor.r, targetColor.r, ease);
+            const G_col = lerp(currentColor.g, targetColor.g, ease);
+            const B_col = lerp(currentColor.b, targetColor.b, ease);
 
-                // Current spiral angle including rotation vs distance
-                // Twist factor: further particles rotate slower or Lag behind? 
-                // Let's make a galaxy twist: inner moves faster angularly, or just simple rigid body + twist
+            // 2. Draw Trails
+            // Instead of clearing, we draw a semi-transparent rect of the current base color
+            // This creates the "fade" effect and color shifting background
+            ctx.fillStyle = `rgba(${R}, ${G_col}, ${B_col}, 0.05)`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                const distance = p.radius * Math.max(width, height) * 0.8;
+            // 3. Update & Draw Particles
+            ctx.fillStyle = `rgba(200, 220, 255, 0.4)`; // Particle color (white-ish)
 
-                // Galaxy twist: angle offset increases with distance (winding arms)
-                const spiralTwist = p.radius * 5;
+            for (let i = 0; i < particleCount * 2; i += 2) {
+                let x = particles[i];
+                let y = particles[i + 1];
 
-                const currentAngle = p.angle + globalRotation + spiralTwist + p.drift;
+                // Generalized Flow Field Equation
+                // The "genes" A-H control the shape of the field
+                const noiseX = (x - canvas.width / 2) * ZOOM;
+                const noiseY = (y - canvas.height / 2) * ZOOM;
 
-                const x = cx + Math.cos(currentAngle) * distance;
-                const y = cy + Math.sin(currentAngle) * distance;
+                // Vector field calculation
+                const vx = Math.sin(time * A + noiseY * B + C) * 2;
+                const vy = Math.cos(time * E + noiseX * F + G) * 2;
 
-                // Breathing/Pulsing effect
-                const pulse = Math.sin(time * 0.02 + p.pulsePhase);
-                const drawSize = p.size * (1 + pulse * 0.2); // +/- 20% size
-                const opacity = Math.max(0.1, Math.min(0.8, (1 - p.radius) + pulse * 0.1)); // Fade out at edges
+                x += vx;
+                y += vy;
 
-                // Periodic color update (expensive to do every frame, so we just pick from palette occasionally or blend? 
-                // For performance, just stick to assigned color but maybe simple opacity shift is enough)
-                // Let's try to shift color slowly towards current palette
-                if (Math.random() < 0.001) {
-                    p.color = currentPalette[Math.floor(Math.random() * currentPalette.length)];
-                }
+                // Wrap around screen
+                if (x < 0) x = canvas.width;
+                if (x > canvas.width) x = 0;
+                if (y < 0) y = canvas.height;
+                if (y > canvas.height) y = 0;
 
-                ctx.beginPath();
-                ctx.arc(x, y, drawSize, 0, Math.PI * 2);
+                particles[i] = x;
+                particles[i + 1] = y;
 
-                // Glow effect
-                ctx.shadowBlur = drawSize * 4;
-                ctx.shadowColor = p.color;
-
-                ctx.fillStyle = p.color;
-                // Hack for opacity with hex colors: use globalAlpha
-                ctx.globalAlpha = opacity;
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-                ctx.shadowBlur = 0;
-            });
-
-            // Draw center "void" or glow
-            const centerGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, 200);
-            centerGradient.addColorStop(0, 'rgba(10, 0, 30, 0)');
-            centerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Transparent
-            ctx.fillStyle = centerGradient;
-            ctx.fillRect(0, 0, width, height);
+                ctx.fillRect(x, y, 1.5, 1.5);
+            }
 
             animationFrameId = requestAnimationFrame(render);
         };
