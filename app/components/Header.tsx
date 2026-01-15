@@ -34,7 +34,7 @@ export default function Header() {
                     onClick={(e) => scrollToSection(e, 'hero')}
                     className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400 hover:opacity-80 transition-opacity"
                 >
-                    AM2
+                    AlphaM2
                 </a>
 
                 <nav className="sm:flex gap-8 hidden">
